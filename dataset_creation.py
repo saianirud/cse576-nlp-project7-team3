@@ -60,11 +60,16 @@ for each_range in numbers_types_range:
         asc_desc = 'ascending' if is_asc else 'descending'
         sample = 'The sorted {0} order of {1} is {2}'.format(asc_desc, numbers_string, sorted_numbers_string)
         
-        dataset.append(sample)
+        dataset.append({
+            'input': numbers,
+            'output': sorted_numbers,
+            'sample': sample,
+            'asc': is_asc
+        })
         is_asc = not is_asc
 
 random.shuffle(dataset)
   
 # write the generated dataset to a file
 with open('dataset_pretrain.json', 'w+') as f:
-    json.dump(dataset, f, ensure_ascii=False, indent=4)
+    json.dump(dataset, f, indent=4)

@@ -15,14 +15,14 @@ class NumbersTypes(Enum):
 dataset = []
 
 # length of dataset
-dataset_length = 1002
+dataset_length = 100000
 
 # minimum and maximum length of list
 min_no_of_numbers = 5
 max_no_of_numbers = 10
 
 # range of numbers in the list
-min_number = -100
+min_number = 0
 max_number = 100
 
 # alter this list accordingly for different types
@@ -71,5 +71,5 @@ for each_range in numbers_types_range:
 random.shuffle(dataset)
   
 # write the generated dataset to a file
-with open('dataset_pretrain.json', 'w+') as f:
+with open('dataset_OOD.json', 'w+') as f:
     json.dump(dataset, f, indent=4)

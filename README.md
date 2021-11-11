@@ -1,1 +1,4 @@
 # cse576-nlp-project7-team3
+
+
+## TASK : SORTING - ASCENDING AND DESCENDING

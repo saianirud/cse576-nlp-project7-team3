@@ -16,7 +16,7 @@ python "finetuner.py" \
     --data_dir='datatset_finetune/sort_99' \
     --output_dir='./models/finetune' \
     --model_name_or_path=t5-base \
-    --ckpt_path='/content/drive/MyDrive/Colab Notebooks/NLP Project/models/finetune/finetune-epoch=19-val_exact_match=0.6900.ckpt' \
+    --ckpt_path='{path-to-checkpoint}' \
     --model_prefix=finetune \
     --sort_type=asc \
     --seed=1 \
@@ -44,3 +44,5 @@ python "finetuner.py" \
     --max_epochs=20
 
 ```
+
+Pass the ckpt_path argument only if you want to load a pretrained model.

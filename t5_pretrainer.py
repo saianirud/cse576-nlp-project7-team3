@@ -37,17 +37,35 @@ class PretrainDataset(Dataset):
         if data_size != 0:
             indexes = random.sample(range(0, len(self.data)), data_size)
             self.examples = [self.data[i] for i in indexes]
+
+        for i in range(len(self.examples)):
+            if i < len(self.examples)//2:
+                self.examples[i][sort_type] = True
+            else:
+                self.examples[i][sort_type] = False
+        
+        random.shuffle(self.examples)
     
     def __len__(self):
         return len(self.examples)
 
     def __getitem__(self, idx):
-        numbers = self.examples[idx]['numbers']
+        
+        example = self.examples[idx]
         label = 'Yes'
-        numbers_string = ', '.join(str(x) for x in numbers)
-        random.shuffle(numbers)
-        sorted_numbers_string = ', '.join(str(x) for x in numbers)
-        input = 'The sorted ascending order of ' + numbers_string + ' is ' + sorted_numbers_string
+        
+        if self.sort_type == 'asc':
+            input = example['asc_text']
+            sort_type = 'ascending'
+        else:
+            input = example['desc_text']
+            sort_type = 'descending'
+
+        if not example[self.sort_type]:
+            label = 'No'
+            random.shuffle(example['numbers'])
+            numbers_string = ' '.join(str(x) for x in example['numbers'])
+            input = 'The sorted '+ sort_type +' order of ' + example['numbers_str'] + ' is ' + numbers_string
         
         return input, label
 

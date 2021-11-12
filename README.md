@@ -12,7 +12,7 @@ pip install -r requirements.txt
 The command below trains and evaluates the Finetuner model:
 
 ```
-python "finetuner.py" \
+python "t5_finetuner.py" \
     --data_dir='datatset_finetune/sort_99' \
     --output_dir='./models/finetune' \
     --model_name_or_path=t5-base \

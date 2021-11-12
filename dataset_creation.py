@@ -48,13 +48,16 @@ for no_of_digits in [2, 3, 4]:
 
             rev_sorted_numbers = sorted(numbers, reverse=True)
             numbers_string = ' '.join(str(x) for x in numbers)
-            sorted_numbers_string = ' '.join(str(x) for x in rev_sorted_numbers)
-            desc_text = 'The sorted descending order of {0} is {1}'.format(numbers_string, sorted_numbers_string)
+            rev_sorted_numbers_string = ' '.join(str(x) for x in rev_sorted_numbers)
+            desc_text = 'The sorted descending order of {0} is {1}'.format(numbers_string, rev_sorted_numbers_string)
             
             dataset.append({
                 'numbers': numbers,
                 'asc_text': asc_text,
-                'desc_text': desc_text
+                'desc_text': desc_text,
+                'numbers_str': numbers_string,
+                'asc_ans': sorted_numbers_string,
+                'desc_ans': rev_sorted_numbers_string
             })
 
         random.shuffle(dataset)

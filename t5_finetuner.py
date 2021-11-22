@@ -130,23 +130,28 @@ if __name__ == '__main__':
         Testing on in domain dataset
     '''
     model = T5Finetuner.load_from_checkpoint(checkpoint_path, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader)
-
     results = trainer.test(model)
-
-    output = {'seed': args.seed, 'test_exact_match': results[0]['test_exact_match']}
-
-    with open(os.path.join(args.output_dir, 'finetune_results.json'), 'w') as fout:
-        json.dump(output, fout)
 
     '''
         Testing on out of domain dataset
     '''
     model = T5Finetuner.load_from_checkpoint(checkpoint_path, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader_ood)
-    results = trainer.test(model)
+    results_ood = trainer.test(model)
 
-    output = {'seed': args.seed, 'test_exact_match': results[0]['test_exact_match']}
+    output = {
+        'seed': args.seed,
+        'model': args.model_name_or_path,
+        'sort_type': args.sort_type,
+        'train_size': args.train_size,
+        'val_size': args.val_size,
+        'test_size': args.test_size,
+        'test_exact_match': results[0]['test_exact_match'],
+        'test_loss': results[0]['test_loss'],
+        'test_exact_match_ood': results_ood[0]['test_exact_match'],
+        'test_loss_ood': results_ood[0]['test_loss']
+    }
 
-    with open(os.path.join(args.output_dir, 'finetune_ood_results.json'), 'w') as fout:
+    with open(os.path.join(args.output_dir, 'finetune_results.json'), 'w') as fout:
         json.dump(output, fout)
 
     print('Finetuning Done!')

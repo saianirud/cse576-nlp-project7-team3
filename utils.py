@@ -63,10 +63,10 @@ class T5(pl.LightningModule):
         tensorboard_logs = {'train_loss': loss}
         return {'loss': loss, 'log': tensorboard_logs}
 
-    def inference_step(self, batch, batch_nb: int):
+    def inference_step(self, batch, batch_nb: int, calc_loss = False):
         questions, correct_answers = batch
 
-        input_ids, attention_mask, _ = self.prepare_batch(
+        input_ids, attention_mask, labels = self.prepare_batch(
             questions=questions, answers=correct_answers)
 
         batch_outputs = self.model.generate(
@@ -74,6 +74,11 @@ class T5(pl.LightningModule):
             attention_mask=attention_mask,
             do_sample=False,
             max_length=self.hparams.max_seq_length)
+        
+        if calc_loss:
+            loss = self.model(input_ids=input_ids,
+                          attention_mask=attention_mask,
+                          labels=labels)[0]
 
         predicted_answers = [
             self.tokenizer.decode(output, skip_special_tokens=True, clean_up_tokenization_spaces=True)
@@ -91,13 +96,14 @@ class T5(pl.LightningModule):
             print('Exact?', exact_matches[0])
 
         metrics = {'exact_matches': exact_matches}
+        if calc_loss: metrics['loss'] = loss
         return metrics
 
     def validation_step(self, batch, batch_nb):
         return self.inference_step(batch, batch_nb)
 
     def test_step(self, batch, batch_nb):
-        return self.inference_step(batch, batch_nb)
+        return self.inference_step(batch, batch_nb, True)
 
     def validation_epoch_end(self, outputs):
         exact_matches = []
@@ -114,11 +120,14 @@ class T5(pl.LightningModule):
 
     def test_epoch_end(self, outputs):
         exact_matches = []
+        losses = []
         for x in outputs:
             exact_matches.extend(x['exact_matches'])
+            losses.append(x['loss'])
         exact_match = sum(exact_matches) / len(exact_matches)
+        loss = sum(losses) / len(losses)
 
-        metrics = {'test_exact_match': exact_match}
+        metrics = {'test_exact_match': exact_match, 'test_loss': loss}
 
         output = metrics.copy()
         output['progress_bar'] = metrics

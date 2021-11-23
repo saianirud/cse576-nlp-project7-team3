@@ -45,37 +45,36 @@ class PretrainDataset(Dataset):
 
     def __getitem__(self, idx):
         '''
-            Take two numbers and rearrange them in sorted order keeping the remaining numbers same. This helps the model to compare two numbers.
+            Take a span of numbers and rearrange them in sorted order keeping the remaining numbers same. This helps the model to sort the numbers.
 
-            Original:  The sorted ascending order of 60 12 91 43 63 15 33 47 69 is 60 12 91 33 63 15 43 47 69
-            Input: The sorted ascending order of 60 12 91 43 63 15 33 47 69 is 60 12 91 <extra_id_0> 63 15 <extra_id_1> 47 69
-            label: 33 43
+            Original: The sorted ascending order of 60 12 91 43 63 15 33 47 69 is 60 12 43 63 91 15 33 47 69
+            Input: The sorted ascending order of 60 12 91 43 63 15 33 47 69 is 60 12 <extra_id_0> <extra_id_1> <extra_id_2> 15 33 47 69
+            label: 43 63 91
         '''
         
-        example = self.examples[idx]
-        numbers = example['numbers']
-        result_numbers = numbers.copy()
+        numbers = self.examples[idx]['numbers']
 
-        indexes = sorted(random.sample(range(len(numbers)), 2))
-        num1, num2 = numbers[indexes[0]], numbers[indexes[1]]
+        span_length = random.choice(range(3, len(numbers)-1)) if len(numbers) > 4 else 2
+        span_start = random.choice(range(len(numbers) - span_length + 1))
+        span_end = span_start + span_length
+        span_numbers = numbers[span_start:span_end]
 
         if self.sort_type == 'asc':
-            numbers[indexes[0]], numbers[indexes[1]] = max(num1, num2), min(num1, num2)
-            result_numbers[indexes[0]], result_numbers[indexes[1]] = min(num1, num2), max(num1, num2)
+            span_numbers = sorted(span_numbers)
             sort_type = 'ascending'
         else:
-            numbers[indexes[0]], numbers[indexes[1]] = min(num1, num2), max(num1, num2)
-            result_numbers[indexes[0]], result_numbers[indexes[1]] = max(num1, num2), min(num1, num2)
+            span_numbers = sorted(span_numbers, reverse=True)
             sort_type = 'descending'
-        
-        label = '{0} {1}'.format(result_numbers[indexes[0]], result_numbers[indexes[1]])
-        for idx, i in enumerate(indexes):
-            result_numbers[i] = '<extra_id_{0}>'.format(idx)
+
+        label = ' '.join(str(x) for x in span_numbers)
+        for i in range(len(span_numbers)):
+            span_numbers[i] = '<extra_id_{0}>'.format(i)
+        result_numbers = numbers[:span_start] + span_numbers + numbers[span_end:]
         
         numbers_string = ' '.join(str(x) for x in numbers)
-        sorted_numbers_string = ' '.join(str(x) for x in result_numbers)
+        result_string = ' '.join(str(x) for x in result_numbers)
         
-        input = 'The sorted '+ sort_type +' order of ' + numbers_string + ' is ' + sorted_numbers_string
+        input = 'The sorted '+ sort_type +' order of ' + numbers_string + ' is ' + result_string
         
         return input, label
 

@@ -100,18 +100,21 @@ class T5(pl.LightningModule):
         return metrics
 
     def validation_step(self, batch, batch_nb):
-        return self.inference_step(batch, batch_nb)
+        return self.inference_step(batch, batch_nb, True)
 
     def test_step(self, batch, batch_nb):
         return self.inference_step(batch, batch_nb, True)
 
     def validation_epoch_end(self, outputs):
         exact_matches = []
+        losses = []
         for x in outputs:
             exact_matches.extend(x['exact_matches'])
+            losses.append(x['loss'])
         exact_match = sum(exact_matches) / len(exact_matches)
+        loss = sum(losses) / len(losses)
 
-        metrics = {'val_exact_match': exact_match}
+        metrics = {'val_exact_match': exact_match, 'val_loss': loss}
 
         output = metrics.copy()
         output['progress_bar'] = metrics

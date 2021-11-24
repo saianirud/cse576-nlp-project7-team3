@@ -132,7 +132,7 @@ if __name__ == '__main__':
     test_dataloader = DataLoader(dataset_test, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
 
     checkpoint_callback = ModelCheckpoint(
-        filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_loss:.2f}'),
+        filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_loss:.4f}'),
         verbose=False, save_last=False, save_top_k=1, mode='min', monitor='val_loss',
         save_weights_only=False, period=args.check_val_every_n_epoch)
 

@@ -8,15 +8,17 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import Dataset, DataLoader
 import jsonlines
 
-from utils import T5 as T5Finetuner
+from utils import T5 as T5Finetuner, convert_to_ebased
 
 
 class FinetuneDataset(Dataset):
 
-    def __init__(self, data_dir, type_path, sort_type, data_size):
+    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None):
 
         self.data = []
         self.examples = []
+
+        self.representation = representation
 
         if sort_type == 'asc':
             self.sort_type = 'asc'
@@ -42,10 +44,25 @@ class FinetuneDataset(Dataset):
         return len(self.examples)
 
     def __getitem__(self, idx):
+        numbers = self.convert_numbers(self.examples[idx]['numbers'])
         if self.sort_type == 'asc':
-            return self.examples[idx]['asc_text'], self.examples[idx]['asc_ans']
+            sort_type = 'ascending'
+            sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers']))
         else:
-            return self.examples[idx]['desc_text'], self.examples[idx]['desc_ans']
+            sort_type = 'descending'
+            sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers'], reverse=True))
+
+        input = 'Sort in {0} order : {1}'.format(sort_type, ' '.join(numbers))
+        label = ' '.join(sorted_numbers)
+
+        return input, label
+    
+    def convert_numbers(self, numbers: list) -> str:
+
+        if self.representation == 'ebased':
+            return [convert_to_ebased(number) for number in numbers]
+        else:
+            return numbers
 
 
 if __name__ == '__main__':
@@ -76,6 +93,7 @@ if __name__ == '__main__':
     parser.add_argument('--t_mult', type=int, default=2,
                         help='a factor increases t_i after a restart (CosineAnnealingWarmRestarts)')
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
+    parser.add_argument("--representation", default=None, type=str, help="Number representation")
 
     parser = pl.Trainer.add_argparse_args(parser)
 
@@ -104,8 +122,8 @@ if __name__ == '__main__':
     test_dataloader_ood = DataLoader(dataset_test_ood, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
 
     checkpoint_callback = ModelCheckpoint(
-        filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_exact_match:.4f}'),
-        verbose=False, save_last=False, save_top_k=1, mode='max', monitor='val_exact_match',
+        filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_loss:.4f}'),
+        verbose=False, save_last=False, save_top_k=1, mode='min', monitor='val_loss',
         save_weights_only=False, period=args.check_val_every_n_epoch)
 
     trainer = pl.Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback)

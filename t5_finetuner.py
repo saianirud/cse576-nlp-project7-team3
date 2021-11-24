@@ -60,9 +60,9 @@ class FinetuneDataset(Dataset):
     def convert_numbers(self, numbers: list) -> str:
 
         if self.representation == 'ebased':
-            return [convert_to_ebased(number) for number in numbers]
+            return [convert_to_ebased(str(number)) for number in numbers]
         else:
-            return numbers
+            return [str(number) for number in numbers]
 
 
 if __name__ == '__main__':
@@ -111,10 +111,10 @@ if __name__ == '__main__':
         Finetuning the model
     '''
 
-    dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size)
-    dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size)
-    dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size)
-    dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type, data_size=args.test_size)
+    dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size, representation=args.representation)
+    dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size, representation=args.representation)
+    dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation)
+    dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation)
 
     train_dataloader = DataLoader(dataset_train, batch_size=args.train_batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(dataset_val, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)

@@ -6,18 +6,11 @@ from typing import List
 
 
 def convert_to_ebased(number: str) -> str:
-    signal = None
-    if number[0] == '-':
-        signal = '-'
-        number = number[1:]
 
     output = []
     for i, digit in enumerate(number[::-1]):
         output.append('e ' + str(i))
         output.append(digit)
-
-    if signal:
-        output.append(signal)
 
     output = output[::-1]
 

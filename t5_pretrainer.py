@@ -142,7 +142,16 @@ if __name__ == '__main__':
 
     results = trainer.test(model)
 
-    output = {'seed': args.seed, 'test_exact_match': results[0]['test_exact_match']}
+    output = {
+        'seed': args.seed,
+        'model': args.model_name_or_path,
+        'sort_type': args.sort_type,
+        'train_size': args.train_size,
+        'val_size': args.val_size,
+        'test_size': args.test_size,
+        'test_exact_match': results[0]['test_exact_match'],
+        'test_loss': results[0]['test_loss']
+    }
 
     with open(os.path.join(args.output_dir, 'pretrain_results.json'), 'w') as fout:
         json.dump(output, fout)

@@ -13,7 +13,7 @@ The command below trains and evaluates the Finetuner model:
 
 ```
 python "t5_finetuner.py" \
-    --data_dir='datatset_finetune/sort_99' \
+    --data_dir='dataset_finetune/sort_99' \
     --output_dir='./models/finetune' \
     --model_name_or_path=t5-base \
     --ckpt_path='{path-to-checkpoint}' \
@@ -41,7 +41,8 @@ python "t5_finetuner.py" \
     --amp_level=O0 \
     --precision=32 \
     --gradient_clip_val=1.0 \
-    --max_epochs=20
+    --max_epochs=20 \
+    --representation=ebased
 
 ```
 

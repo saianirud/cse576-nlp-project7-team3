@@ -8,7 +8,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import Dataset, DataLoader
 import jsonlines
 
-from utils import T5 as T5Finetuner, convert_to_ebased
+from utils import T5 as T5Finetuner, convert_to_ebased, convert_to_10based, convert_to_10ebased
 
 
 class FinetuneDataset(Dataset):
@@ -57,10 +57,14 @@ class FinetuneDataset(Dataset):
 
         return input, label
     
-    def convert_numbers(self, numbers: list) -> str:
+    def convert_numbers(self, numbers: list) -> list:
 
         if self.representation == 'ebased':
             return [convert_to_ebased(str(number)) for number in numbers]
+        elif self.representation == '10ebased':
+            return [convert_to_10ebased(str(number)) for number in numbers]
+        elif self.representation == '10based':
+            return [convert_to_10based(str(number)) for number in numbers]
         else:
             return [str(number) for number in numbers]
 

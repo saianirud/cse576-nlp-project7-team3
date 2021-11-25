@@ -52,8 +52,8 @@ class FinetuneDataset(Dataset):
             sort_type = 'descending'
             sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers'], reverse=True))
 
-        input = 'Sort in {0} order : {1}'.format(sort_type, ' '.join(numbers))
-        label = ' '.join(sorted_numbers)
+        input = 'Sort in {0} order : {1}'.format(sort_type, '|'.join(numbers))
+        label = '|'.join(sorted_numbers)
 
         return input, label
     
@@ -166,7 +166,8 @@ if __name__ == '__main__':
         'test_exact_match': results[0]['test_exact_match'],
         'test_loss': results[0]['test_loss'],
         'test_exact_match_ood': results_ood[0]['test_exact_match'],
-        'test_loss_ood': results_ood[0]['test_loss']
+        'test_loss_ood': results_ood[0]['test_loss'],
+        'batch_size': args.train_batch_size
     }
 
     with open(os.path.join(args.output_dir, 'finetune_results.json'), 'w') as fout:

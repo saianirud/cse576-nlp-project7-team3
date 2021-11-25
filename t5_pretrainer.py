@@ -66,13 +66,13 @@ class PretrainDataset(Dataset):
             span_numbers = sorted(span_numbers, reverse=True)
             sort_type = 'descending'
 
-        label = ' '.join(str(x) for x in span_numbers)
+        label = '|'.join(str(x) for x in span_numbers)
         for i in range(len(span_numbers)):
             span_numbers[i] = '<extra_id_{0}>'.format(i)
         result_numbers = numbers[:span_start] + span_numbers + numbers[span_end:]
         
-        numbers_string = ' '.join(str(x) for x in numbers)
-        result_string = ' '.join(str(x) for x in result_numbers)
+        numbers_string = '|'.join(str(x) for x in numbers)
+        result_string = '|'.join(str(x) for x in result_numbers)
         
         input = 'The sorted '+ sort_type +' order of ' + numbers_string + ' is ' + result_string
         
@@ -159,7 +159,8 @@ if __name__ == '__main__':
         'val_size': args.val_size,
         'test_size': args.test_size,
         'test_exact_match': results[0]['test_exact_match'],
-        'test_loss': results[0]['test_loss']
+        'test_loss': results[0]['test_loss'],
+        'batch_size': args.train_batch_size
     }
 
     with open(os.path.join(args.output_dir, 'pretrain_results.json'), 'w') as fout:

@@ -6,8 +6,8 @@ from typing import List
 
 
 def compute_exact_match(predicted_answer, correct_answer) -> bool:
-    predicted_answer = predicted_answer.strip().lower().replace(" ","")
-    correct_answer = correct_answer.strip().lower().replace(" ","")
+    predicted_answer = predicted_answer.strip().lower().replace(" ", "")
+    correct_answer = correct_answer.strip().lower().replace(" ", "")
     return predicted_answer == correct_answer
 
 
@@ -63,7 +63,7 @@ class T5(pl.LightningModule):
         tensorboard_logs = {'train_loss': loss}
         return {'loss': loss, 'log': tensorboard_logs}
 
-    def inference_step(self, batch, batch_nb: int, calc_loss = False):
+    def inference_step(self, batch, batch_nb: int, calc_loss=False):
         questions, correct_answers = batch
 
         input_ids, attention_mask, labels = self.prepare_batch(
@@ -74,11 +74,11 @@ class T5(pl.LightningModule):
             attention_mask=attention_mask,
             do_sample=False,
             max_length=self.hparams.max_seq_length)
-        
+
         if calc_loss:
             loss = self.model(input_ids=input_ids,
-                          attention_mask=attention_mask,
-                          labels=labels)[0]
+                              attention_mask=attention_mask,
+                              labels=labels)[0]
 
         predicted_answers = [
             self.tokenizer.decode(output, skip_special_tokens=True, clean_up_tokenization_spaces=True)
@@ -100,18 +100,21 @@ class T5(pl.LightningModule):
         return metrics
 
     def validation_step(self, batch, batch_nb):
-        return self.inference_step(batch, batch_nb)
+        return self.inference_step(batch, batch_nb, True)
 
     def test_step(self, batch, batch_nb):
         return self.inference_step(batch, batch_nb, True)
 
     def validation_epoch_end(self, outputs):
         exact_matches = []
+        losses = []
         for x in outputs:
             exact_matches.extend(x['exact_matches'])
+            losses.append(x['loss'])
         exact_match = sum(exact_matches) / len(exact_matches)
+        loss = sum(losses) / len(losses)
 
-        metrics = {'val_exact_match': exact_match}
+        metrics = {'val_exact_match': exact_match, 'val_loss': loss}
 
         output = metrics.copy()
         output['progress_bar'] = metrics

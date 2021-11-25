@@ -1,0 +1,34 @@
+Model T5 base - NO SEPARATOR
+Training Size: 10000
+Number of digits: 2
+Masking Strategy : mask 3 random numbers and pretrain the model
+Eg: The sorting ascending order of 12 1 90,10,5,89 is 1,<mask1>,<mask2>,12,89,<mask3>
+labels : exact values
+
+Only Fine-tuning : 2 digits 5 length
+// 5 was zero -research paper
+{"seed": 1, "model": "t5-base", "sort_type": "asc", "train_size": 10000, "val_size": 1000, "test_size": 1000, "test_exact_match": 0.873, "test_loss": 0.0643061101436615, "test_exact_match_ood": 0.0, "test_loss_ood": 13.989748001098633}
+
+
+Pretraining : Stores model with lowest validation loss which is used for further fine-tuning. Pretraining with 10000 train,test and validation size
+
+Pretraining and fine tuning
+{"seed": 1, "model": "t5-base", "sort_type": "asc", "train_size": 10000, "val_size": 1000, "test_size": 1000, "test_exact_match": 0.999, "test_loss": 0.00031557067995890975, "test_exact_match_ood": 0.0, "test_loss_ood": 13.284204483032227}
+
+Other observations regarding OOD generalization
+The model is generating 2-digit numbers even though the input contains 4 digit numbers
+Same thing happened after pretraining and fine-tuning which is mentioned above.
+Two positive thing is that
+in Domain test_exact match increased to 99 percent when pretrained as compared to running only fine-tuning
+Out of domain test_ood decreased from 13.989748001098633 to 13.284204483032227
+
+
+
+
+
+
+
+
+
+
+

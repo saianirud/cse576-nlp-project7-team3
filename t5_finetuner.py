@@ -127,7 +127,7 @@ if __name__ == '__main__':
 
     checkpoint_callback = ModelCheckpoint(
         filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_exact_match:.4f}'),
-        verbose=False, save_last=False, save_top_k=1, mode='max', monitor='val_exact_match',
+        verbose=False, save_last=True, save_top_k=1, mode='max', monitor='val_exact_match',
         save_weights_only=False, period=args.check_val_every_n_epoch)
 
     trainer = pl.Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback)

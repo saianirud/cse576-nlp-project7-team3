@@ -8,15 +8,18 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import Dataset, DataLoader
 import jsonlines
 
-from utils import T5 as T5Pretrainer
+from utils import T5 as T5Pretrainer, convert_to_ebased, convert_to_10based, convert_to_10ebased
 
 
 class PretrainDataset(Dataset):
 
-    def __init__(self, data_dir, type_path, sort_type, data_size):
+    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None, span_length=None):
 
         self.data = []
         self.examples = []
+
+        self.representation = representation
+        self.span_length = span_length
 
         if sort_type == 'asc':
             self.sort_type = 'asc'
@@ -32,6 +35,9 @@ class PretrainDataset(Dataset):
                             self.data.append(each)
         
         random.shuffle(self.data)
+
+        if self.span_length:
+            self.data = list(filter(lambda x: len(x) > self.span_length+1, self.data))
         
         self.examples = self.data
         if data_size != 0:
@@ -54,7 +60,7 @@ class PretrainDataset(Dataset):
         
         numbers = self.examples[idx]['numbers']
 
-        span_length = random.choice(range(3, len(numbers)-1)) if len(numbers) > 4 else 2
+        span_length = self.span_length if self.span_length else random.choice(range(3, len(numbers)-1)) if len(numbers) > 4 else 2
         span_start = random.choice(range(len(numbers) - span_length + 1))
         span_end = span_start + span_length
         span_numbers = numbers[span_start:span_end]
@@ -65,6 +71,9 @@ class PretrainDataset(Dataset):
         else:
             span_numbers = sorted(span_numbers, reverse=True)
             sort_type = 'descending'
+        
+        numbers = self.convert_numbers(numbers)
+        span_numbers = self.convert_numbers(span_numbers)
 
         label = '|'.join(str(x) for x in span_numbers)
         for i in range(len(span_numbers)):
@@ -77,6 +86,17 @@ class PretrainDataset(Dataset):
         input = 'The sorted '+ sort_type +' order of ' + numbers_string + ' is ' + result_string
         
         return input, label
+
+    def convert_numbers(self, numbers: list) -> list:
+
+        if self.representation == 'ebased':
+            return [convert_to_ebased(str(number)) for number in numbers]
+        elif self.representation == '10ebased':
+            return [convert_to_10ebased(str(number)) for number in numbers]
+        elif self.representation == '10based':
+            return [convert_to_10based(str(number)) for number in numbers]
+        else:
+            return [str(number) for number in numbers]
 
 
 if __name__ == '__main__':
@@ -106,6 +126,8 @@ if __name__ == '__main__':
     parser.add_argument('--t_mult', type=int, default=2,
                         help='a factor increases t_i after a restart (CosineAnnealingWarmRestarts)')
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
+    parser.add_argument("--representation", default=None, type=str, help="Number representation")
+    parser.add_argument("--span_length", default=None, type=int, help="Length of span to mask")
 
     parser = pl.Trainer.add_argparse_args(parser)
 
@@ -123,9 +145,9 @@ if __name__ == '__main__':
         Pretraining the model
     '''
 
-    dataset_train = PretrainDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size)
-    dataset_val = PretrainDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size)
-    dataset_test = PretrainDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size)
+    dataset_train = PretrainDataset(args.data_dir, 'train', args.sort_type, args.train_size, args.representation, args.span_length)
+    dataset_val = PretrainDataset(args.data_dir, 'val', args.sort_type, args.val_size, args.representation, args.span_length)
+    dataset_test = PretrainDataset(args.data_dir, 'test', args.sort_type, args.test_size, args.representation, args.span_length)
 
     train_dataloader = DataLoader(dataset_train, batch_size=args.train_batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(dataset_val, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
@@ -133,7 +155,7 @@ if __name__ == '__main__':
 
     checkpoint_callback = ModelCheckpoint(
         filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_exact_match:.4f}'),
-        verbose=False, save_last=False, save_top_k=1, mode='max', monitor='val_exact_match',
+        verbose=False, save_last=True, save_top_k=1, mode='max', monitor='val_exact_match',
         save_weights_only=False, period=args.check_val_every_n_epoch)
 
     trainer = pl.Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback)

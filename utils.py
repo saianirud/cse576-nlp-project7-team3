@@ -50,18 +50,6 @@ def compute_exact_match(predicted_answer, correct_answer) -> bool:
     return predicted_answer == correct_answer
 
 
-def convert_to_num(correct_answers) :
-    splits = correct_answers.split("|")
-    if splits[0] == '|' : splits = splits[1:]
-    if splits[-1] == '|' : splits = splits[:-1]
-    correct_output = []
-    for ans in splits : 
-        num = ''
-        for i in range(0, len(ans), 6) : 
-            num += ans[i]
-        correct_output.append(num)
-    return ', '.join(correct_output)
-
 class T5(pl.LightningModule):
 
     def __init__(self, hparams, train_dataloader, val_dataloader, test_dataloader):
@@ -141,13 +129,10 @@ class T5(pl.LightningModule):
 
         # Log every power of two.
         if batch_nb & (batch_nb - 1) == 0:
-            index = [i for i, x in enumerate(exact_matches) if not x][0] if len([i for i, x in enumerate(exact_matches) if not x]) > 0 else 0
-            print('\nQuestion:', questions[index])
-            print('Correct:  ', correct_answers[index])
-            print('Predicted:', predicted_answers[index].encode('utf-8'))
-            print('Correct (num): ', convert_to_num(correct_answers[index]))
-            print('Predicted (num): ', convert_to_num(predicted_answers[index]))
-            print('Exact?', exact_matches[index])
+            print('\nQuestion:', questions[0])
+            print('Correct:  ', correct_answers[0])
+            print('Predicted:', predicted_answers[0].encode('utf-8'))
+            print('Exact?', exact_matches[0])
 
         metrics = {'exact_matches': exact_matches}
         if calc_loss: metrics['loss'] = loss

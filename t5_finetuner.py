@@ -52,8 +52,8 @@ class FinetuneDataset(Dataset):
             sort_type = 'descending'
             sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers'], reverse=True))
 
-        input = 'Sort in {0} order : {1}'.format(sort_type, '|'.join(numbers))
-        label = '|'.join(sorted_numbers)
+        input = 'Sort in {0} order : {1}'.format(sort_type, ' '.join(numbers))
+        label = ' '.join(sorted_numbers)
 
         return input, label
     

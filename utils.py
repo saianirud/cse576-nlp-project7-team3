@@ -5,6 +5,33 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from typing import List
 
 
+def convert_to_10based(number: str) -> str:
+    output = []
+    for i, digit in enumerate(number[::-1]):
+        output.append('1' + i * '0'  if i > 0  else '1')
+        output.append(digit)
+    output = output[::-1]
+    return ' '.join(output)
+
+
+def convert_to_10ebased(number: str) -> str:
+    output = []
+    for i, digit in enumerate(number[::-1]):
+        output.append('10e' + str(i))
+        output.append(digit)
+    output = output[::-1]
+    return ' '.join(output)
+
+
+def convert_to_ebased(number: str) -> str:
+    output = []
+    for i, digit in enumerate(number[::-1]):
+        output.append('e ' + str(i))
+        output.append(digit)
+    output = output[::-1]
+    return ' '.join(output)
+
+
 def compute_exact_match(predicted_answer, correct_answer) -> bool:
     predicted_answer = predicted_answer.strip().lower().replace(" ","")
     correct_answer = correct_answer.strip().lower().replace(" ","")

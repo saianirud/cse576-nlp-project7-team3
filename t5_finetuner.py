@@ -76,6 +76,7 @@ if __name__ == '__main__':
     parser.add_argument('--t_mult', type=int, default=2,
                         help='a factor increases t_i after a restart (CosineAnnealingWarmRestarts)')
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
+    parser.add_argument("--representation", default=None, type=str, help="Number representation")
 
     parser = pl.Trainer.add_argparse_args(parser)
 

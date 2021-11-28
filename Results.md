@@ -1,11 +1,11 @@
 | Sort | Strategy | Model | Digits | Rep | P/F | Train | Val | Test | Sep | Inpol Loss | Inpol Acc | Expol Loss | Expol Acc | Batch | Comments |
 |------|----------|-------|--------|-----|-----|-------|-----|------|-----|------------|-----------|------------|-----------|-------|---------|
-| Asc | E-based | T5 Base | 4 | e-based | F | 10K | 1K | 1K | `'\|'` | 7.9491e-05 | 99.8 | 0.1284 | 79.0 | 8 |
-| Asc | E-based | T5 Base | 2 | e-based | F | 10K | 1K | 1K | `' '` | 0.0011 | 98.5 | 2.6851 | 0.0 | 4 |
-| Asc | E-based | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `' '` | 0.0174 | 93.0 | 2.3167 | 0.0 | 4 |
-| Asc | E-based | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `','` | 0.0128 | 91.0 | 1.5032 | 0.0 | 4 |
-| Asc | E-based | T5 Small | 4 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0007 | 98.5 | 0.2338 | 23.9 | 16 |
-| Asc | E-based | T5 Small | 2 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0017 | 97.4 | 1.2284 | 0.0 | 16 |
+| Asc | Only Finetuning | T5 Base | 4 | e-based | F | 10K | 1K | 1K | `'\|'` | 7.9491e-05 | 99.8 | 0.1284 | 79.0 | 8 |
+| Asc | Only Finetuning | T5 Base | 2 | e-based | F | 10K | 1K | 1K | `' '` | 0.0011 | 98.5 | 2.6851 | 0.0 | 4 |
+| Asc | Only Finetuning | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `' '` | 0.0174 | 93.0 | 2.3167 | 0.0 | 4 |
+| Asc | Only Finetuning | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `','` | 0.0128 | 91.0 | 1.5032 | 0.0 | 4 |
+| Asc | Only Finetuning | T5 Small | 4 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0007 | 98.5 | 0.2338 | 23.9 | 16 |
+| Asc | Only Finetuning | T5 Small | 2 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0017 | 97.4 | 1.2284 | 0.0 | 16 |
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `' '` | 0.0272 | 87.3 | 1.4896 | 13.0 | 4 | Span Length is random for each sample
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `'\|'` | 0.0382 | 91.6 | 1.0411 | 17.2 | 8 | Span Length is random for each sample
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `'\|'` | 0.0429 | 90.9 | 1.0272 | 17.3 | 8 | Span Length = 3

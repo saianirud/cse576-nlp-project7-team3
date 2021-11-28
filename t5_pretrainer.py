@@ -37,7 +37,7 @@ class PretrainDataset(Dataset):
         random.shuffle(self.data)
 
         if self.span_length:
-            self.data = list(filter(lambda x: len(x) > self.span_length+1, self.data))
+            self.data = list(filter(lambda x: len(x['numbers']) > self.span_length+1, self.data))
         
         self.examples = self.data
         if data_size != 0:

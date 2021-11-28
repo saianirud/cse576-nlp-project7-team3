@@ -29,11 +29,12 @@ Take a continuous span of numbers and rearrange them in sorted order keeping the
 The length of span is mentioned in the comments column. It is 3 for above example.
 
 ## Yes/No Classification
-Classify whether the given list of numbers in the input sentence are correctly sorted into mentioned order. 
+Classify whether the given list of numbers in the input sentence are correctly sorted into mentioned order.</br>
 `Input: The sorted ascending order of 60|12|91|43|63|15|33|47|69 is 12|15|33|43|47|60|63|69|91`</br>
 `label: Yes`</br>
 `Input: The sorted ascending order of 60|12|91|43|63|15|33|47|69 is 60|12|43|63|91|15|33|47|69`</br>
 `label: No`</br>
+
 
 ## E-based Representation
 `Numbers: 60|12|91`</br>

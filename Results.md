@@ -1,6 +1,6 @@
 | Sort | Strategy | Model | Digits | Representation | P/F | Train | Val | Test | Batch | Sep | Inpol Loss | Inpol Acc | Expol Loss | Expol Acc | Comments |
 |------|---------|-------|--------|----------------|-----|-------|-----|------|-------|-----|------------|-----------|------------|-----------|---------|
-| Asc | E-based | T5 Base | 4 | e-based | F | 10K | 1K | 1K | 8 | `'|'` | 7.9491e-05 | 99.8 | 0.1284 | 79.0 |
+| Asc | E-based | T5 Base | 4 | e-based | F | 10K | 1K | 1K | 8 | `'\|'` | 7.9491e-05 | 99.8 | 0.1284 | 79.0 |
 | Asc | E-based | T5 Base | 2 | e-based | F | 10K | 1K | 1K | 4 | `' '` | 0.0011 | 98.5 | 2.6851 | 0.0 |
 | Asc | E-based | T5 Base | 2 | e-based | F | 1K | 100 | 100 | 4 | `' '` | 0.0174 | 93.0 | 2.3167 | 0.0 |
 | Asc | E-based | T5 Base | 2 | e-based | F | 1K | 100 | 100 | 4 | `','` | 0.0128 | 91.0 | 1.5032 | 0.0 |

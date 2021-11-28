@@ -15,7 +15,6 @@
 | Asc | Span Masking | T5 Small | 4 | Decimal | P</br>F | 100K</br>10K | 10K</br>1K | 10K</br>1K | 16 | `'\|'` | 0.0271 | 92.2 | 2.2388 | 6.4 | Span Length is random for each sample
 | Asc | Span Masking | T5 Small | 4 | Decimal | P</br>F | 70K</br>10K | 7K</br>1K | 7K</br>1K | 16 | `'\|'` | 0.0393 | 88.5 | 1.8637 | 5.6 | Span Length = 3
 
-</br></br>
 ## Span Masking
 Take a continuous span of numbers and rearrange them in sorted order keeping the remaining numbers same. This helps the model to sort the numbers.</br>
 `Original: The sorted ascending order of 60|12|91|43|63|15|33|47|69 is 60|12|43|63|91|15|33|47|69`</br>
@@ -23,7 +22,6 @@ Take a continuous span of numbers and rearrange them in sorted order keeping the
 `label: 43|63|91`</br>
 The length of span is mentioned in the comments column. It is 3 for above example.
 
-</br></br>
 ## E-based Representation
 `Numbers: 60|12|91`</br>
 `Input: Sort in ascending order: 6 e 1 0 e 0|1 e 1 2 e 0|9 e 1 1 e 0`</br>

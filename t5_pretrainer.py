@@ -66,11 +66,14 @@ class PretrainDataset(Dataset):
             reverse = True
 
         sorted_numbers = sorted(numbers, reverse=reverse)
-        sorted_numbers_before = ' '.join(str(x) for x in numbers)
+        sorted_numbers_before = '|'.join(str(x) for x in numbers)
 
-        first_term, second_term = maskNumber(sorted_numbers, 3)
-        first_term = ' '.join(str(x) for x in first_term)
-        sorted_numbers_string = ' '.join(str(x) for x in second_term)
+        rand =  random.choice(range(3,len(numbers)))
+
+        first_term, second_term = maskNumber(sorted_numbers, rand)
+
+        first_term = '|'.join(str(x) for x in first_term)
+        sorted_numbers_string = '|'.join(str(x) for x in second_term)
 
         sample = 'The sorted {0} order of {1} is {2}'.format(sorting_order, sorted_numbers_before, first_term), \
                  sorted_numbers_string

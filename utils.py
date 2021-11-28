@@ -5,6 +5,17 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from typing import List
 
 
+def convert_to_ebased(number: str) -> str:
+    output = []
+    for i, digit in enumerate(number[::-1]):
+        output.append('e ' + str(i))
+        output.append(digit)
+
+    output = output[::-1]
+
+    return ' '.join(output)
+
+
 def compute_exact_match(predicted_answer, correct_answer) -> bool:
     predicted_answer = predicted_answer.strip().lower().replace(" ", "")
     correct_answer = correct_answer.strip().lower().replace(" ", "")

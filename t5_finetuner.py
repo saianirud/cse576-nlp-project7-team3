@@ -8,15 +8,17 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import Dataset, DataLoader
 import jsonlines
 
-from utils import T5 as T5Finetuner
+from utils import T5 as T5Finetuner, convert_to_ebased
 
 
 class FinetuneDataset(Dataset):
 
-    def __init__(self, data_dir, type_path, sort_type, data_size):
+    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None):
 
         self.data = []
         self.examples = []
+
+        self.representation = representation
 
         if sort_type == 'asc':
             self.sort_type = 'asc'
@@ -42,10 +44,25 @@ class FinetuneDataset(Dataset):
         return len(self.examples)
 
     def __getitem__(self, idx):
+        numbers = self.convert_numbers(self.examples[idx]['numbers'])
         if self.sort_type == 'asc':
-            return self.examples[idx]['asc_text'], self.examples[idx]['asc_ans']
+            sort_type = 'ascending'
+            sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers']))
         else:
-            return self.examples[idx]['desc_text'], self.examples[idx]['desc_ans']
+            sort_type = 'descending'
+            sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers'], reverse=True))
+
+        input = 'Sort in {0} order : {1}'.format(sort_type, '|'.join(numbers))
+        label = '|'.join(sorted_numbers)
+
+        return input, label
+
+    def convert_numbers(self, numbers: list) -> str:
+
+        if self.representation == 'ebased':
+            return [convert_to_ebased(str(number)) for number in numbers]
+        else:
+            return [str(number) for number in numbers]
 
 
 if __name__ == '__main__':
@@ -78,6 +95,7 @@ if __name__ == '__main__':
     parser.add_argument('--t_mult', type=int, default=2,
                         help='a factor increases t_i after a restart (CosineAnnealingWarmRestarts)')
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
+    parser.add_argument("--representation", default=None, type=str, help="Number representation")
 
     parser = pl.Trainer.add_argparse_args(parser)
 
@@ -95,13 +113,13 @@ if __name__ == '__main__':
     '''
 
     dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type,
-                                    data_size=args.train_size)
+                                    data_size=args.train_size, representation=args.representation)
     dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type,
-                                  data_size=args.val_size)
+                                  data_size=args.val_size, representation=args.representation)
     dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type,
-                                   data_size=args.test_size)
+                                   data_size=args.test_size, representation=args.representation)
     dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type,
-                                       data_size=args.test_size)
+                                       data_size=args.test_size, representation=args.representation)
 
     train_dataloader = DataLoader(dataset_train, batch_size=args.train_batch_size, shuffle=True,
                                   num_workers=args.num_workers)
@@ -114,7 +132,7 @@ if __name__ == '__main__':
 
     checkpoint_callback = ModelCheckpoint(
         filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_exact_match:.4f}'),
-        verbose=False, save_last=False, save_top_k=1, mode='min', monitor='val_loss',
+        verbose=False, save_last=False, save_top_k=1, mode='max', monitor='val_exact_match',
         save_weights_only=False, period=args.check_val_every_n_epoch)
 
     trainer = pl.Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback)
@@ -130,7 +148,7 @@ if __name__ == '__main__':
 
     trainer.fit(model)
 
-    '''
+    '''s
         Testing the model
     '''
 
@@ -160,7 +178,8 @@ if __name__ == '__main__':
         'test_exact_match': results[0]['test_exact_match'],
         'test_loss': results[0]['test_loss'],
         'test_exact_match_ood': results_ood[0]['test_exact_match'],
-        'test_loss_ood': results_ood[0]['test_loss']
+        'test_loss_ood': results_ood[0]['test_loss'],
+        'batch_size': args.train_batch_size
     }
 
     with open(os.path.join(args.output_dir, 'finetune_results.json'), 'w') as fout:

@@ -41,7 +41,8 @@ python "t5_finetuner.py" \
     --amp_level=O0 \
     --precision=32 \
     --gradient_clip_val=1.0 \
-    --max_epochs=20
+    --max_epochs=20 \
+    --representation=ebased
 
 ```
 

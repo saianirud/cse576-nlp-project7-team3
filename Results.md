@@ -2,12 +2,16 @@
 |------|----------|-------|--------|-----|-----|-------|-----|------|-----|------------|-----------|------------|-----------|-------|---------|
 | Asc | Only Finetuning | T5 Base | 4 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 1.4748e-05 | 100 | 0.0074 | 81.7 | 16 |
 | Asc | Only Finetuning | T5 Base | 4 | e-based | F | 10K | 1K | 1K | `'\|'` | 7.9491e-05 | 99.8 | 0.1284 | 79.0 | 8 |
+| Asc | Only Finetuning| T5 Base | 4 | Decimal | F | 10K | 1K  | 1K  | `'\|'` |  0.044 | 90.6 | 0.736 | 23.4 | 8 |
 | Asc | Only Finetuning | T5 Base | 2 | e-based | F | 10K | 1K | 1K | `' '` | 0.0011 | 98.5 | 2.6851 | 0.0 | 4 |
 | Asc | Only Finetuning | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `' '` | 0.0174 | 93.0 | 2.3167 | 0.0 | 4 |
 | Asc | Only Finetuning | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `','` | 0.0128 | 91.0 | 1.5032 | 0.0 | 4 |
+| Asc | Only Finetuning | T5 Base | 2 | Decimal | F | 10K | 1K  | 1K  | `'\|'` |  0.00030 | 100 | 13.683 | 0.0 | 8 |
 | Asc | Only Finetuning | T5 Small | 4 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0007 | 98.5 | 0.2338 | 23.9 | 16 |
 | Asc | Only Finetuning | T5 Small | 4 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0005 | 98.5 | 0.1737 | 38.9 | 16 |
+| Asc | Only Finetuning | T5 Small | 4 | Decimal | F | 10K| 1K  | 1K  | `'\|'` |  0.0686 | 82.6 | 0.899 | 14.9 | 8 |
 | Asc | Only Finetuning | T5 Small | 2 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0017 | 97.4 | 1.2284 | 0.0 | 16 |
+| Asc | Only Finetuning | T5 Small | 2 | Decimal | F | 10K| 1K  | 1K  | `'\|'` |  0.0098 | 96.2 | 11.79 | 0.0 | 8 |
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `' '` | 0.0272 | 87.3 | 1.4896 | 13.0 | 4 | Span Length is random
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `'\|'` | 0.0382 | 91.6 | 1.0411 | 17.2 | 8 | Span Length is random
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `'\|'` | 0.0429 | 90.9 | 1.0272 | 17.3 | 8 | Span Length = 3
@@ -21,13 +25,9 @@
 | Asc | Yes/No Classification | T5 Base | 2 | Decimal | P</br>F | 1K</br>1K | 1K</br>1K | 1K</br>1K | `' '` | 0.0362 | 88.7 | 8.8804 | 0.0 | 16 |
 | Asc | Yes/No Classification | T5 Small | 4 | e-based | P</br>F | 100k</br>10K | 1K</br>1K  | 1K</br>1K  | `'\|'` | 0.0008 | 97.9 | 0.2105 | 39.5 | 16 |
 | Asc | Number Masking | T5 Base | 2 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K  | 1K</br>1K  | `' '` |  0.000315 | 99.9 | 13.284 | 0.0 | 4 | Numbers Masked = 3
-| Asc | Only Finetuning| T5 Base | 4 | Decimal | F | 10K | 1K  | 1K  | `'\|'` |  0.044 | 90.6 | 0.736 | 23.4 | 8 |
 | Asc | Number Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K  | 1K</br>1K  | `'\|'` |  0.0385 | 91.7 | 1.045 | 17.2 | 8 | Numbers Masked = 3
-| Asc | Only Finetuning | T5 Base | 2 | Decimal | F | 10K | 1K  | 1K  | `'\|'` |  0.00030 | 100 | 13.683 | 0.0 | 8 |
 | Asc | Number Masking | T5 Base | 2 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K  | 1K</br>1K  | `'\|'` |  0.0027 | 99 | 12.488 | 0.0 | 8 | Numbers Masked = 3
-| Asc | Only Finetuning | T5 Small | 4 | Decimal | F | 10K| 1K  | 1K  | `'\|'` |  0.0686 | 82.6 | 0.899 | 14.9 | 8 |
 | Asc | Number Masking | T5 Small | 4 | Decimal | P</br>F | 100K</br>10K | 10K</br>1K  | 10K</br>1K  | `'\|'` |  0.0379 | 90.8 | 2.07 | 6.5 | 8 | Numbers Masked = 3
-| Asc | Only Finetuning | T5 Small | 2 | Decimal | F | 10K| 1K  | 1K  | `'\|'` |  0.0098 | 96.2 | 11.79 | 0.0 | 8 |
 
 
 

@@ -75,9 +75,12 @@ class PretrainDataset(Dataset):
         numbers = self.convert_numbers(numbers)
         span_numbers = self.convert_numbers(span_numbers)
 
-        label = '|'.join(str(x) for x in span_numbers)
+        label = ''
+        i = 0
         for i in range(len(span_numbers)):
+            label += '<extra_id_{0}>{1}'.format(i, span_numbers[i])
             span_numbers[i] = '<extra_id_{0}>'.format(i)
+        label += '<extra_id_{0}>'.format(i+1)
         result_numbers = numbers[:span_start] + span_numbers + numbers[span_end:]
         
         numbers_string = '|'.join(str(x) for x in numbers)

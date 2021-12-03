@@ -3,7 +3,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from typing import List
-
+import re
 
 def convert_to_10based(number: str) -> str:
 
@@ -45,6 +45,7 @@ def convert_to_ebased(number: str) -> str:
 
 
 def compute_exact_match(predicted_answer, correct_answer) -> bool:
+    correct_answer = re.sub(r'\<extra_id_[0-9]\>', '', correct_answer)
     predicted_answer = predicted_answer.strip().lower().replace(" ","")
     correct_answer = correct_answer.strip().lower().replace(" ","")
     return predicted_answer == correct_answer
@@ -143,7 +144,7 @@ class T5(pl.LightningModule):
         if batch_nb & (batch_nb - 1) == 0:
             index = [i for i, x in enumerate(exact_matches) if not x][0] if len([i for i, x in enumerate(exact_matches) if not x]) > 0 else 0
             print('\nQuestion:', questions[index])
-            print('Correct:  ', correct_answers[index])
+            print('Correct:  ', re.sub(r'\<extra_id_[0-9]\>', ' ', correct_answers[index]))
             print('Predicted:', predicted_answers[index].encode('utf-8'))
             print('Correct (num): ', convert_to_num(correct_answers[index]))
             print('Predicted (num): ', convert_to_num(predicted_answers[index]))

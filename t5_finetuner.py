@@ -13,12 +13,13 @@ from utils import T5 as T5Finetuner, convert_to_ebased, convert_to_10based, conv
 
 class FinetuneDataset(Dataset):
 
-    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None):
+    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None, separator=None):
 
         self.data = []
         self.examples = []
 
         self.representation = representation
+        self.separator = separator if separator else ' '
 
         if sort_type == 'asc':
             self.sort_type = 'asc'
@@ -52,8 +53,8 @@ class FinetuneDataset(Dataset):
             sort_type = 'descending'
             sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers'], reverse=True))
 
-        input = 'Sort in {0} order : {1}'.format(sort_type, '|'.join(numbers))
-        label = '|'.join(sorted_numbers)
+        input = 'Sort in {0} order : {1}'.format(sort_type, self.separator.join(numbers))
+        label = self.separator.join(sorted_numbers)
 
         return input, label
     
@@ -98,6 +99,7 @@ if __name__ == '__main__':
                         help='a factor increases t_i after a restart (CosineAnnealingWarmRestarts)')
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
     parser.add_argument("--representation", default=None, type=str, help="Number representation")
+    parser.add_argument("--separator", default=None, type=str, help="Separator")
 
     parser = pl.Trainer.add_argparse_args(parser)
 
@@ -115,10 +117,10 @@ if __name__ == '__main__':
         Finetuning the model
     '''
 
-    dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size, representation=args.representation)
-    dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size, representation=args.representation)
-    dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation)
-    dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation)
+    dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size, representation=args.representation, separator=args.separator)
+    dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size, representation=args.representation, separator=args.separator)
+    dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation, separator=args.separator)
+    dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation, separator=args.separator)
 
     train_dataloader = DataLoader(dataset_train, batch_size=args.train_batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(dataset_val, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
@@ -127,7 +129,7 @@ if __name__ == '__main__':
 
     checkpoint_callback = ModelCheckpoint(
         filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_exact_match:.4f}'),
-        verbose=False, save_last=True, save_top_k=1, mode='max', monitor='val_exact_match',
+        verbose=False, save_last=False, save_top_k=1, mode='max', monitor='val_exact_match',
         save_weights_only=False, period=args.check_val_every_n_epoch)
 
     trainer = pl.Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback)

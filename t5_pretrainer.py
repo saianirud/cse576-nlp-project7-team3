@@ -13,13 +13,14 @@ from utils import T5 as T5Pretrainer, convert_to_ebased, convert_to_10based, con
 
 class PretrainDataset(Dataset):
 
-    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None, span_length=None):
+    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None,  separator=None, span_length=None):
 
         self.data = []
         self.examples = []
 
         self.representation = representation
         self.span_length = span_length
+        self.separator = separator if separator else ' '
 
         if sort_type == 'asc':
             self.sort_type = 'asc'
@@ -83,8 +84,8 @@ class PretrainDataset(Dataset):
         label += '<extra_id_{0}>'.format(i+1)
         result_numbers = numbers[:span_start] + span_numbers + numbers[span_end:]
         
-        numbers_string = '|'.join(str(x) for x in numbers)
-        result_string = '|'.join(str(x) for x in result_numbers)
+        numbers_string = self.separator.join(str(x) for x in numbers)
+        result_string = self.separator.join(str(x) for x in result_numbers)
         
         input = 'The sorted '+ sort_type +' order of ' + numbers_string + ' is ' + result_string
         
@@ -148,9 +149,9 @@ if __name__ == '__main__':
         Pretraining the model
     '''
 
-    dataset_train = PretrainDataset(args.data_dir, 'train', args.sort_type, args.train_size, args.representation, args.span_length)
-    dataset_val = PretrainDataset(args.data_dir, 'val', args.sort_type, args.val_size, args.representation, args.span_length)
-    dataset_test = PretrainDataset(args.data_dir, 'test', args.sort_type, args.test_size, args.representation, args.span_length)
+    dataset_train = PretrainDataset(args.data_dir, 'train', args.sort_type, args.train_size, args.representation, args.separator, args.span_length)
+    dataset_val = PretrainDataset(args.data_dir, 'val', args.sort_type, args.val_size, args.representation, args.separator, args.span_length)
+    dataset_test = PretrainDataset(args.data_dir, 'test', args.sort_type, args.test_size, args.representation, args.separator, args.span_length)
 
     train_dataloader = DataLoader(dataset_train, batch_size=args.train_batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(dataset_val, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)

@@ -48,11 +48,9 @@
 | Asc | Native Language Number Masking | T5 Small | 4 | Decimal | F | 10000 | 1000 | 1000 | `' '` | - | - | - | - | 16 | As the model wasn't returning any output, we stopped executing native language number prediction | 20
 | Asc | Digit Masking | T5 Base | 2 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.019 | 92.8 | 10.412 | 0 | 16 | Number of Digits Masked = 1 | 20
 | Desc | Digit Masking | T5 Large | 4 | Decimal | P</br>F | 30000</br>30000 | 1000</br>1000 | 1000</br>1000 | `' '` | - | - | - | - | 8 | Memory Error | 10
-| Desc | Digit Masking | T5 Small | 4 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.101 | 78 | 10236 | 0 | 16 | Number of Digits Masked = 1 | 20
+| Desc | Digit Masking | T5 Small | 4 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.101 | 78 | 10.236 | 0 | 16 | Number of Digits Masked = 1 | 20
 | Desc | Digit Masking | T5 Large | 2 | Decimal | P</br>F | 30000</br>30000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.0807 | 87 | 15.682 | 0 | 8 | Number of Digits Masked = 1 | 10
-​
-​
-​
+
 
 ## Span Masking
 

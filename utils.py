@@ -3,6 +3,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from typing import List
+import re
 
 
 def convert_to_10based(number: str) -> str:
@@ -45,6 +46,7 @@ def convert_to_ebased(number: str) -> str:
 
 
 def compute_exact_match(predicted_answer, correct_answer) -> bool:
+    correct_answer = re.sub(r'\<extra_id_[0-9]\>', '', correct_answer)
     predicted_answer = predicted_answer.strip().lower().replace(" ","")
     correct_answer = correct_answer.strip().lower().replace(" ","")
     return predicted_answer == correct_answer
@@ -130,7 +132,7 @@ class T5(pl.LightningModule):
         # Log every power of two.
         if batch_nb & (batch_nb - 1) == 0:
             print('\nQuestion:', questions[0])
-            print('Correct:  ', correct_answers[0])
+            print('Correct:  ', re.sub(r'\<extra_id_[0-9]\>', ' ', correct_answers[0]))
             print('Predicted:', predicted_answers[0].encode('utf-8'))
             print('Exact?', exact_matches[0])
 

@@ -132,6 +132,7 @@ if __name__ == '__main__':
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
     parser.add_argument("--representation", default=None, type=str, help="Number representation")
     parser.add_argument("--span_length", default=None, type=int, help="Length of span to mask")
+    parser.add_argument("--separator", default=None, type=str, help="Separator")
 
     parser = pl.Trainer.add_argparse_args(parser)
 

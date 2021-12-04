@@ -138,7 +138,7 @@ Classify whether the given list of numbers in the input sentence are correctly s
 `Input: The sorted ascending order of 12 7 33 is 7 <mask_1>2 <mask_2>3`</br>
 `label: 1 3`
 
-## Native Language Modelling
+### Native Language Digit Representation
 
 `Numbers: ४५ ३ ७९` </br>
 `Input: Sort in ascending order: ४५ ३ ७९`</br>

@@ -53,7 +53,7 @@ Default number of epochs is 20 unless otherwise specified
 | Asc | Digit Masking | T5 Small | 4 | Decimal | P</br>F | 1000</br>1000 | 100</br>100 | 100</br>100 | `' '` | 0.3691 | 9 | 0.7751 | 0 | 16 | Number of Digits Masked = 1 | 20
 | Asc | Digit Masking | T5 Small | 4 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.453 | 73.1 | 1.539 | 5.9 | 16 | Number of Digits Masked = 1 | 20
 | Asc | Digit Masking | T5 Small | 2 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.1397 | 75.5 | 10.464 | 0 | 16 | Number of Digits Masked = 1 | 20
-| Asc | Native Language Number Masking | T5 Small | 4 | Decimal | F | 10000 | 1000 | 1000 | `' '` | - | - | - | - | 16 | As the model wasn't returning any output, we stopped executing native language number prediction | 20
+| Asc | Native Language Digits Representation | T5 Small | 4 | Decimal | F | 10000 | 1000 | 1000 | `' '` | - | - | - | - | 16 | As the model wasn't returning any output, we stopped executing native language number prediction | 20
 | Asc | Digit Masking | T5 Base | 2 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.019 | 92.8 | 10.412 | 0 | 16 | Number of Digits Masked = 1 | 20
 | Desc | Only Finetuning | T5 Base | 4 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0002 | 99.4 | 0.0259 | 59.5 | 16 |
 | Desc | Only Finetuning | T5 Base | 2 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0015 | 98.2 | 1.7185 | 0.0 | 16 |

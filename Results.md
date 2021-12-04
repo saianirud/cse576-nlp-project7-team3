@@ -68,8 +68,6 @@ Classify whether the given list of numbers in the input sentence are correctly s
 `label: Yes`</br>
 `Input: The sorted ascending order of 60|12|91|43|63|15|33|47|69 is 60|12|43|63|91|15|33|47|69`</br>
 `label: No`</br>
-​
-​
 
 ## E-based Representation
 
@@ -77,21 +75,24 @@ Classify whether the given list of numbers in the input sentence are correctly s
 `Input: Sort in ascending order: 6 e 1 0 e 0|1 e 1 2 e 0|9 e 1 1 e 0`</br>
 `label: 1 e 1 2 e 0|4 e 1 3 e 0|9 e 1 1 e 0`
 ​
-
 ## 10e-based Representation
 
 `Numbers: 60|12|91`</br>
 `Input: Sort in ascending order: 6 10e1 0 10e0|1 10e1 2 10e0|9 10e1 1 10e0`</br>
 `label: 1 10e1 2 10e0|4 10e1 3 10e0|9 10e1 1 10e0`
-​
 
+## 10-based Representation
+
+`Numbers: 60|12|91`</br>
+`Input: Sort in ascending order: 6 10 0 1|1 10 2 1|9 10 1 1`</br>
+`label: 1 10 2 1|4 10 3 1|9 10 1 1`
+​
 ## Number Masking
 
 `Numbers: 60|12|91`</br>
 `Input: The sorted ascending order of 6555|6173|423|108 is 108|<extra_id_0>|<extra_id_1>|<extra_id_2>`</br>
 `label: 423|6173|6555`
 ​
-
 ## Digit Masking
 
 `Numbers: 12 7 33`</br>

@@ -9,7 +9,7 @@ Default number of epochs is 20 unless otherwise specified
 | Asc | Only Finetuning| T5 Base | 4 | Decimal | F | 10K | 1K  | 1K  | `'\|'` |  0.044 | 90.6 | 0.736 | 23.4 | 8 |
 | Asc | Only Finetuning | T5 Base | 4 | Decimal | F | 10K| 1K  | 1K  | `'@'` |  0.0461 | 90.6 | 0.7928 | 25 | 8 | | 20 
 | Asc | Only Finetuning | T5 Base | 2 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0001 | 99.8 | 1.304 | 0.0 | 16 |
-| Asc | Only Finetuning | T5 Base | 2 | e-based | F | 10K | 1K | 1K | `'|'` | 0.0003 | 99.8 | 1.3245 | 0.1 | 16 |
+| Asc | Only Finetuning | T5 Base | 2 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0003 | 99.8 | 1.3245 | 0.1 | 16 |
 | Asc | Only Finetuning | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `' '` | 0.0174 | 93.0 | 2.3167 | 0.0 | 4 |
 | Asc | Only Finetuning | T5 Base | 2 | e-based | F | 1K | 100 | 100 | `','` | 0.0128 | 91.0 | 1.5032 | 0.0 | 4 |
 | Asc | Only Finetuning | T5 Base | 2 | Decimal | F | 10K | 1K  | 1K  | `'\|'` |  0.00030 | 100 | 13.683 | 0.0 | 8 |

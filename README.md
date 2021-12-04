@@ -64,17 +64,17 @@ Classify whether the given list of numbers in the input sentence are correctly s
 
 ## How to run the code
 
-Go to the project directory:
+### Go to the project directory:
 ```
 cd /content/drive/MyDrive/Colab Notebooks/cse576-nlp-project7-team3
 ```
 
-Install the required packages:
+### Install the required packages:
 ```
 pip install -r requirements.txt
 ```
 
-The command below tests and evaluates the Finetuned model:
+### The command below tests and evaluates the Finetuned model:
 
 ```
 
@@ -113,16 +113,16 @@ The command below tests and evaluates the Finetuned model:
 
 ```
 #### Params
-`data_dir`: Path to the dataset. The directory should contains 4 files with the following names i.e. `train.jsonl`, `val.jsonl`, `test.jsonl`, `expol_test.jsonl`
-`output_dir`: Path where the model creates the checkpoint.
-`ckpt_path`: Path to checkpoint to load a finetuned model.
-`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default representation will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.
+`data_dir`: Path to the dataset. The directory should contains 4 files with the following names i.e. `train.jsonl`, `val.jsonl`, `test.jsonl`, `expol_test.jsonl`</br>
+`output_dir`: Path where the model creates the checkpoint.</br>
+`ckpt_path`: Path to checkpoint to load a finetuned model.</br>
+`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default representation will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.</br>
 `separator`: Pass the separator you want to separate the numbers. If no separator is given, Default separator will be `' '`
-`sort_type`: There are 3 types of representations i.e. `asc`, `desc`.
-`model_prefix`: The model checkpoint name starts with this prefix.
+`sort_type`: There are 3 types of representations i.e. `asc`, `desc`.</br>
+`model_prefix`: The model checkpoint name starts with this prefix.</br>
 
 
-The command below trains and evaluates the Pretrained model:
+### The command below trains and evaluates the Pretrained model:
 
 ```
 
@@ -161,10 +161,10 @@ The command below trains and evaluates the Pretrained model:
 
 ```
 #### Params
-`data_dir`: Path to the dataset. The directory should contains 4 files with the following names i.e. `train.jsonl`, `val.jsonl`, `test.jsonl`, `expol_test.jsonl`
-`output_dir`: Path where the model creates the checkpoint.
-`ckpt_path`: Pass the `ckpt_path argument` only if you want to load a pretrained model.
-`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default representation will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.
+`data_dir`: Path to the dataset. The directory should contains 4 files with the following names i.e. `train.jsonl`, `val.jsonl`, `test.jsonl`, `expol_test.jsonl`</br>
+`output_dir`: Path where the model creates the checkpoint.</br>
+`ckpt_path`: Pass the `ckpt_path argument` only if you want to load a pretrained model.</br>
+`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default representation will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.</br>
 `separator`: Pass the separator you want to separate the numbers. If no separator is given, Default separator will be `' '`
-`sort_type`: There are 3 types of representations i.e. `asc`, `desc`.
-`model_prefix`: The model checkpoint name starts with this prefix.
+`sort_type`: There are 3 types of representations i.e. `asc`, `desc`.</br>
+`model_prefix`: The model checkpoint name starts with this prefix.</br>

@@ -1,55 +1,25 @@
 import pytorch_lightning as pl
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-
-from typing import List
 import re
-
-
-def convert_to_10based(number: str) -> str:
-
-    output = []
-    for i, digit in enumerate(number[::-1]):
-        if i > 0:
-            output.append('1' + i * '0')
-        else:
-            output.append('1')
-        output.append(digit)
-
-    output = output[::-1]
-
-    return ' '.join(output)
-
-
-def convert_to_10ebased(number: str) -> str:
-
-    output = []
-    for i, digit in enumerate(number[::-1]):
-        output.append('10e' + str(i))
-        output.append(digit)
-
-    output = output[::-1]
-
-    return ' '.join(output)
-
-
-def convert_to_ebased(number: str) -> str:
-
-    output = []
-    for i, digit in enumerate(number[::-1]):
-        output.append('e ' + str(i))
-        output.append(digit)
-
-    output = output[::-1]
-
-    return ' '.join(output)
+from typing import List
 
 
 def compute_exact_match(predicted_answer, correct_answer) -> bool:
-    correct_answer = re.sub(r'\<extra_id_[0-9]\>', '', correct_answer)
-    predicted_answer = predicted_answer.strip().lower().replace(" ","")
-    correct_answer = correct_answer.strip().lower().replace(" ","")
-    return predicted_answer == correct_answer
+  correct_answer = correct_answer.replace(">",'').replace('<','')
+  predicted_answer = predicted_answer.replace(">",'').replace('<','')
+  correct_answer = [x for x in correct_answer.split(' ') if 'mask' not in x]
+  predicted_answer = [x for x in predicted_answer.split(' ') if 'mask' not in x]
+  correct_answer = [x for x in correct_answer if x.isdigit()]
+  predicted_answer = [x for x in predicted_answer if x.isdigit()]
+
+  if len(correct_answer) != len(predicted_answer):
+      return False
+  else:
+      for i,j in list(zip(correct_answer,predicted_answer)):
+        if int(i) != int(j):
+            return False
+      return True
 
 
 class T5(pl.LightningModule):
@@ -132,7 +102,7 @@ class T5(pl.LightningModule):
         # Log every power of two.
         if batch_nb & (batch_nb - 1) == 0:
             print('\nQuestion:', questions[0])
-            print('Correct:  ', re.sub(r'\<extra_id_[0-9]\>', ' ', correct_answers[0]))
+            print('Correct:  ', correct_answers[0])
             print('Predicted:', predicted_answers[0].encode('utf-8'))
             print('Exact?', exact_matches[0])
 
@@ -141,21 +111,18 @@ class T5(pl.LightningModule):
         return metrics
 
     def validation_step(self, batch, batch_nb):
-        return self.inference_step(batch, batch_nb, True)
+        return self.inference_step(batch, batch_nb)
 
     def test_step(self, batch, batch_nb):
         return self.inference_step(batch, batch_nb, True)
 
     def validation_epoch_end(self, outputs):
         exact_matches = []
-        losses = []
         for x in outputs:
             exact_matches.extend(x['exact_matches'])
-            losses.append(x['loss'])
         exact_match = sum(exact_matches) / len(exact_matches)
-        loss = sum(losses) / len(losses)
 
-        metrics = {'val_exact_match': exact_match, 'val_loss': loss}
+        metrics = {'val_exact_match': exact_match}
 
         output = metrics.copy()
         output['progress_bar'] = metrics

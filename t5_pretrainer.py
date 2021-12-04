@@ -7,19 +7,16 @@ import os
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import Dataset, DataLoader
 import jsonlines
-
-from utils import T5 as T5Finetuner, convert_to_ebased, convert_to_10based, convert_to_10ebased
+import re
+from utils import T5 as T5Finetuner
 
 
 class FinetuneDataset(Dataset):
 
-    def __init__(self, data_dir, type_path, sort_type, data_size, representation=None, separator=None):
+    def __init__(self, data_dir, type_path, sort_type, data_size):
 
         self.data = []
         self.examples = []
-
-        self.representation = representation
-        self.separator = separator if separator else ' '
 
         if sort_type == 'asc':
             self.sort_type = 'asc'
@@ -45,29 +42,33 @@ class FinetuneDataset(Dataset):
         return len(self.examples)
 
     def __getitem__(self, idx):
-        numbers = self.convert_numbers(self.examples[idx]['numbers'])
+        example = self.examples[idx]
+
+        def masker(inp):
+            mask_numbers = random.choices(inp, k=3)
+            masked_numbers = []
+            dictionary_mask = {}
+            mask_labels = ''
+            for i, number in enumerate(mask_numbers):
+                dictionary_mask.update({number: f'<mask_{i}>' + str(number)[
+                                                                1:]})
+                masked_numbers.append(f'<mask_{i}>' + str(number)[1:])
+                mask_labels = mask_labels + f'<mask_{i}> ' + str(number)[
+                    0] + ' '
+            mask_labels = mask_labels + f'<mask_{len(mask_numbers)}>'
+            numbers = [str(i) if i not in mask_numbers else
+                       dictionary_mask[i]
+                       for i in inp]
+
+            return ' '.join(numbers), mask_labels
+
         if self.sort_type == 'asc':
-            sort_type = 'ascending'
-            sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers']))
+            numbers_string, label = masker(example['numbers'])
+            input = 'The sorted ascending order of ' + numbers_string + ' is ' + example['asc_ans']
         else:
-            sort_type = 'descending'
-            sorted_numbers = self.convert_numbers(sorted(self.examples[idx]['numbers'], reverse=True))
-
-        input = 'Sort in {0} order : {1}'.format(sort_type, self.separator.join(numbers))
-        label = self.separator.join(sorted_numbers)
-
+            numbers_string, label = masker(example['numbers'])
+            input = 'The sorted descending order of ' + numbers_string + ' is ' + example['desc_ans']
         return input, label
-    
-    def convert_numbers(self, numbers: list) -> list:
-
-        if self.representation == 'ebased':
-            return [convert_to_ebased(str(number)) for number in numbers]
-        elif self.representation == '10ebased':
-            return [convert_to_10ebased(str(number)) for number in numbers]
-        elif self.representation == '10based':
-            return [convert_to_10based(str(number)) for number in numbers]
-        else:
-            return [str(number) for number in numbers]
 
 
 if __name__ == '__main__':
@@ -98,8 +99,6 @@ if __name__ == '__main__':
     parser.add_argument('--t_mult', type=int, default=2,
                         help='a factor increases t_i after a restart (CosineAnnealingWarmRestarts)')
     parser.add_argument("--num_workers", default=4, type=int, help="Number of CPU workers for loading data.")
-    parser.add_argument("--representation", default=None, type=str, help="Number representation")
-    parser.add_argument("--separator", default=None, type=str, help="Separator")
 
     parser = pl.Trainer.add_argparse_args(parser)
 
@@ -117,15 +116,15 @@ if __name__ == '__main__':
         Finetuning the model
     '''
 
-    dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size, representation=args.representation, separator=args.separator)
-    dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size, representation=args.representation, separator=args.separator)
-    dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation, separator=args.separator)
-    dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type, data_size=args.test_size, representation=args.representation, separator=args.separator)
+    dataset_train = FinetuneDataset(data_dir=args.data_dir, type_path='train', sort_type=args.sort_type, data_size=args.train_size)
+    dataset_val = FinetuneDataset(data_dir=args.data_dir, type_path='val', sort_type=args.sort_type, data_size=args.val_size)
+    dataset_test = FinetuneDataset(data_dir=args.data_dir, type_path='test', sort_type=args.sort_type, data_size=args.test_size)
+    #dataset_test_ood = FinetuneDataset(data_dir=args.data_dir, type_path='expol_test', sort_type=args.sort_type, data_size=args.test_size)
 
     train_dataloader = DataLoader(dataset_train, batch_size=args.train_batch_size, shuffle=True, num_workers=args.num_workers)
     val_dataloader = DataLoader(dataset_val, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
     test_dataloader = DataLoader(dataset_test, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
-    test_dataloader_ood = DataLoader(dataset_test_ood, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
+    #test_dataloader_ood = DataLoader(dataset_test_ood, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers)
 
     checkpoint_callback = ModelCheckpoint(
         filepath=os.path.join(args.output_dir, args.model_prefix + '-{epoch}-{val_exact_match:.4f}'),
@@ -134,21 +133,21 @@ if __name__ == '__main__':
 
     trainer = pl.Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback)
 
-    # if args.ckpt_path:
-    #     print('Loading from checkpoint: ', args.ckpt_path)
-    #     checkpoint_path = glob.glob(args.ckpt_path)[0]
-    #     model = T5Finetuner.load_from_checkpoint(checkpoint_path, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader)
-    # else:
-    #     model = T5Finetuner(hparams=args, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader)
+    if args.ckpt_path:
+        print('Loading from checkpoint: ', args.ckpt_path)
+        checkpoint_path = glob.glob(args.ckpt_path)[0]
+        model = T5Finetuner.load_from_checkpoint(checkpoint_path, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader)
+    else:
+        model = T5Finetuner(hparams=args, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader)
 
-    # trainer.fit(model)
+    trainer.fit(model)
 
 
     '''
         Testing the model
     '''
 
-    checkpoint_path = glob.glob(args.ckpt_path)[0]
+    checkpoint_path = glob.glob(os.path.join(args.output_dir, args.model_prefix + '-*.ckpt'))[0]
     
     '''
         Testing on in domain dataset
@@ -159,8 +158,8 @@ if __name__ == '__main__':
     '''
         Testing on out of domain dataset
     '''
-    model = T5Finetuner.load_from_checkpoint(checkpoint_path, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader_ood)
-    results_ood = trainer.test(model)
+    model = T5Finetuner.load_from_checkpoint(checkpoint_path, train_dataloader=train_dataloader, val_dataloader=val_dataloader, test_dataloader=test_dataloader)
+    #results_ood = trainer.test(model)
 
     output = {
         'seed': args.seed,
@@ -170,13 +169,10 @@ if __name__ == '__main__':
         'val_size': args.val_size,
         'test_size': args.test_size,
         'test_exact_match': results[0]['test_exact_match'],
-        'test_loss': results[0]['test_loss'],
-        'test_exact_match_ood': results_ood[0]['test_exact_match'],
-        'test_loss_ood': results_ood[0]['test_loss'],
-        'batch_size': args.train_batch_size
+        'test_loss': results[0]['test_loss']
     }
 
-    with open(os.path.join(args.output_dir, 'finetune_results.json'), 'w') as fout:
+    with open(os.path.join(args.output_dir, 'pretrain_results.json'), 'w') as fout:
         json.dump(output, fout)
 
     print('Finetuning Done!')

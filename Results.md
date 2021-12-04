@@ -130,7 +130,7 @@ Classify whether the given list of numbers in the input sentence are correctly s
 
 `Numbers: 60|12|91`</br>
 `Input: The sorted ascending order of 6555|6173|423|108 is 108|<extra_id_0>|<extra_id_1>|<extra_id_2>`</br>
-`label: <extra_id_0> 423 <extra_id_1> 6173 <extra_id_2> 6555`
+`label: <extra_id_0> 423 <extra_id_1> 6173 <extra_id_2> 6555 <extra_id_3> `
 `
 ​
 ## Digit Masking

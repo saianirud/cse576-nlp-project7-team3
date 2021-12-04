@@ -116,8 +116,8 @@ pip install -r requirements.txt
 `data_dir`: Path to the dataset. The directory should contains 4 files with the following names i.e. `train.jsonl`, `val.jsonl`, `test.jsonl`, `expol_test.jsonl`</br>
 `output_dir`: Path where the model creates the checkpoint.</br>
 `ckpt_path`: Path to checkpoint to load a finetuned model.</br>
-`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default representation will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.</br>
-`separator`: Pass the separator you want to separate the numbers. If no separator is given, Default separator will be `' '`
+`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.</br>
+`separator`: Pass the separator you want to separate the numbers. If no separator is given, Default will be `' '`</br>
 `sort_type`: There are 3 types of representations i.e. `asc`, `desc`.</br>
 `model_prefix`: The model checkpoint name starts with this prefix.</br>
 
@@ -164,7 +164,7 @@ pip install -r requirements.txt
 `data_dir`: Path to the dataset. The directory should contains 4 files with the following names i.e. `train.jsonl`, `val.jsonl`, `test.jsonl`, `expol_test.jsonl`</br>
 `output_dir`: Path where the model creates the checkpoint.</br>
 `ckpt_path`: Pass the `ckpt_path argument` only if you want to load a pretrained model.</br>
-`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default representation will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.</br>
-`separator`: Pass the separator you want to separate the numbers. If no separator is given, Default separator will be `' '`
+`representation`: There are 3 types of representations i.e. `ebased`, `10ebased`, `10based`. If no representation is given, default will be `decimal`. Do not pass the `representation` arg if you want `decimal` representation.</br>
+`separator`: Pass the separator you want to separate the numbers. If no separator is given, Default will be `' '`</br>
 `sort_type`: There are 3 types of representations i.e. `asc`, `desc`.</br>
 `model_prefix`: The model checkpoint name starts with this prefix.</br>

@@ -47,6 +47,15 @@
 | Asc | Digit Masking | T5 Small | 2 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.1397 | 75.5 | 10.464 | 0 | 16 | Number of Digits Masked = 1 | 20
 | Asc | Native Language Number Masking | T5 Small | 4 | Decimal | F | 10000 | 1000 | 1000 | `' '` | - | - | - | - | 16 | As the model wasn't returning any output, we stopped executing native language number prediction | 20
 | Asc | Digit Masking | T5 Base | 2 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.019 | 92.8 | 10.412 | 0 | 16 | Number of Digits Masked = 1 | 20
+| Desc | Only Finetuning | T5 Base | 4 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0002 | 99.4 | 0.0259 | 59.5 | 16 |
+| Desc | Only Finetuning | T5 Base | 2 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0015 | 98.2 | 1.7185 | 0.0 | 16 |
+| Desc | Only Finetuning | T5 Small | 4 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0028 | 91.8 | 0.0373 | 57.7 | 16 |
+| Desc | Only Finetuning | T5 Small | 2 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0041 | 95.7 | 1.3578 | 0.0 | 16 |
+| Desc | Yes/No Classification | T5 Base | 4 | e-based | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 3.7685e-05 | 99.9 | 0.2506 | 18.0 | 16 |
+| Desc | Yes/No Classification | T5 Base | 4 | Decimal | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0485 | 88.0 | 0.9197 | 17.5 | 16 |
+| Desc | Yes/No Classification | T5 Base | 2 | e-based | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0011 | 97.9 | 0.1941 | 10.9 | 16 |
+| Desc | Yes/No Classification | T5 Small | 4 | e-based | P</br>F | 100k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0011 | 97.2 | 0.2622 | 14.0 | 16 |
+| Desc | Yes/No Classification | T5 Small | 2 | e-based | P</br>F | 100k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0029 | 97.8 | 2.5975 | 0.0 | 16 |
 | Desc | Digit Masking | T5 Large | 4 | Decimal | P</br>F | 30000</br>30000 | 1000</br>1000 | 1000</br>1000 | `' '` | - | - | - | - | 8 | Memory Error | 10
 | Desc | Digit Masking | T5 Small | 4 | Decimal | P</br>F | 10000</br>10000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.101 | 78 | 10.236 | 0 | 16 | Number of Digits Masked = 1 | 20
 | Desc | Digit Masking | T5 Large | 2 | Decimal | P</br>F | 30000</br>30000 | 1000</br>1000 | 1000</br>1000 | `' '` | 0.0807 | 87 | 15.682 | 0 | 8 | Number of Digits Masked = 1 | 10

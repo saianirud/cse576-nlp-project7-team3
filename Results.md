@@ -22,6 +22,10 @@ Default number of epochs is 20 unless otherwise specified
 | Asc | Only Finetuning | T5 Small | 2 | e-based | F | 10K | 1K | 1K | `'\|'` | 0.0017 | 97.4 | 1.2284 | 0.0 | 16 |
 | Asc | Only Finetuning | T5 Small | 2 | Decimal | F | 10K| 1K  | 1K  | `'\|'` |  0.0098 | 96.2 | 11.79 | 0.0 | 8 |
 | Asc | Only Finetuning | T5 Small | 2 | Decimal | F | 10K| 1K  | 1K  | `'@'` |   0.0055 | 98.2 | 11.09 | 0.0 | 8 | | 30
+| Asc | Only Finetuning | T5 Base | 4 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0002 | 99.7 | 0.0131 | 80.6 | 16 || 20
+| Asc | Only Finetuning | T5 Small | 4 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0006 | 99.0 | 0.2292 | 2.7 | 16 || 20
+| Asc | Only Finetuning | T5 Small | 2 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0267 | 86.7 | 1.3058 | 0.1 | 16 || 20
+| Asc | Only Finetuning | T5 Base | 2 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0036 | 97.9 | 1.3130 | 0.2 | 16 || 20
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `' '` | 0.0272 | 87.3 | 1.4896 | 13.0 | 4 | Span Length is random
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `'\|'` | 0.0382 | 91.6 | 1.0411 | 17.2 | 8 | Span Length is random
 | Asc | Span Masking | T5 Base | 4 | Decimal | P</br>F | 10K</br>10K | 1K</br>1K | 1K</br>1K | `'\|'` | 0.0429 | 90.9 | 1.0272 | 17.3 | 8 | Span Length = 3
@@ -89,7 +93,10 @@ Default number of epochs is 20 unless otherwise specified
 | Desc | Span Masking | T5 Small | 4 | Decimal | P</br>F | 100K</br>10K | 10K</br>1K | 10K</br>1K | `'\|'` | 0.0451 | 85.8 | 2.0066 | 5.8 | 16 | Span Length is random
 | Desc | Span Masking | T5 Small | 4 | Decimal | P</br>F | 60K</br>10K | 6K</br>1K | 6K</br>1K | `'\|'` | 0.0532 | 85.1 | 1.4518 | 7.1 | 16 | Span Length = 4
 | Desc | Span Masking | T5 Small | 2 | Decimal | P</br>F | 70K</br>10K | 7K</br>1K | 7K</br>1K | `'\|'` | 6.3913e-05 | 100.0 | 10.8221 | 0.0 | 16 | Span Length = 3
-
+| Desc | Only Finetuning | T5 Base | 4 | 10-based | F | 10k | 1k | 1k | `'\|'` | 2.4705e-05 | 100 | 0.0537 | 42.7 | 16 ||20
+| Desc | Only Finetuning | T5 Small | 4 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0007 | 99.2 | 0.1582 | 4.3 | 16 ||20
+| Desc | Only Finetuning | T5 Base | 2 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0021 | 99.1 | 1.5341 | 0.5 | 16 ||20
+| Desc | Only Finetuning | T5 Small | 2 | 10-based | F | 10k | 1k | 1k | `'\|'` | 0.0126 | 94.7 | 2.8978 | 0.0 | 16 ||20
 
 ## Span Masking
 

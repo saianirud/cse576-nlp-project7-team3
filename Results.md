@@ -65,7 +65,7 @@ Default number of epochs is 20 unless otherwise specified
 | Desc | Only Finetuning | T5 Small | 2 | 10e-based | F | 10k | 1k | 1k | `'\|'` | 0.0041 | 95.7 | 1.3578 | 0.0 | 16 |
 | Desc | Yes/No Classification | T5 Base | 4 | e-based | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 3.7685e-05 | 99.9 | 0.2506 | 18.0 | 16 |
 | Desc | Yes/No Classification | T5 Base | 4 | Decimal | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0485 | 88.0 | 0.9197 | 17.5 | 16 |
-| Desc | Yes/No Classification | T5 Base | 2 | e-based | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0011 | 97.9 | 0.1941 | 10.9 | 16 |
+| Desc | Yes/No Classification | T5 Base | 2 | e-based | P</br>F | 10k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0011 | 97.9 | 2.4068 | 0.0 | 16 |
 | Desc | Yes/No Classification | T5 Small | 4 | e-based | P</br>F | 100k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0011 | 97.2 | 0.2622 | 14.0 | 16 |
 | Desc | Yes/No Classification | T5 Small | 2 | e-based | P</br>F | 100k</br>10k | 1k</br>1k | 1k</br>1k | `'\|'` | 0.0029 | 97.8 | 2.5975 | 0.0 | 16 |
 | Desc | Digit Masking | T5 Large | 4 | Decimal | P</br>F | 30000</br>30000 | 1000</br>1000 | 1000</br>1000 | `' '` | - | - | - | - | 8 | Memory Error | 10
